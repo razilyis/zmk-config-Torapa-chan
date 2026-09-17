@@ -1,0 +1,11 @@
+identifier: torapa_chan
+name: Torapa-chan TPS43 Controller
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+supported:
+  - gpio
+  - i2c
+  - usb_device
+  - ble

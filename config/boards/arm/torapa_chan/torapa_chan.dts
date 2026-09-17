@@ -1,0 +1,74 @@
+/dts-v1/;
+#include <nordic/nrf52840_qiaa.dtsi>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/nrf-pinctrl.h>
+
+/ {
+    model = "Torapa-chan TPS43 Controller";
+    compatible = "torapa,chan";
+    chosen {
+        zephyr,code-partition = &code_partition;
+        zephyr,sram = &sram0;
+        zephyr,flash = &flash0;
+        zmk,kscan = &empty_scan;
+    };
+    empty_scan: empty_scan {
+        compatible = "zmk,kscan-mock";
+        rows = <1>;
+        columns = <1>;
+        events = <>;
+    };
+    tps43_listener: tps43_listener {
+        compatible = "zmk,input-listener";
+        device = <&tps43>;
+    };
+};
+&gpio0 { status = "okay"; };
+&gpio1 { status = "okay"; };
+&gpiote { status = "okay"; };
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 { psels = <NRF_PSEL(TWIM_SCL, 0, 27)>, <NRF_PSEL(TWIM_SDA, 0, 26)>; };
+    };
+    i2c0_sleep: i2c0_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SCL, 0, 27)>, <NRF_PSEL(TWIM_SDA, 0, 26)>;
+            low-power-enable;
+        };
+    };
+};
+&i2c0 {
+    compatible = "nordic,nrf-twim";
+    status = "okay";
+    clock-frequency = <100000>;
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
+    tps43: iqs5xx@74 {
+        compatible = "azoteq,iqs5xx";
+        status = "okay";
+        reg = <0x74>;
+        rdy-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&gpio0 8 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>;
+        one-finger-tap;
+        two-finger-tap;
+        press-and-hold;
+        press-and-hold-time = <250>;
+        scroll;
+        natural-scroll-x;
+        natural-scroll-y;
+    };
+};
+zephyr_udc0: &usbd { status = "okay"; };
+&flash0 {
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+        // Adafruit nRF52840 / S140 v6 layout: verify bootloader before flashing.
+        sd_partition: partition@0 { reg = <0x0 0x26000>; };
+        code_partition: partition@26000 { reg = <0x26000 0xc6000>; };
+        storage_partition: partition@ec000 { reg = <0xec000 0x8000>; };
+        boot_partition: partition@f4000 { reg = <0xf4000 0xc000>; };
+    };
+};

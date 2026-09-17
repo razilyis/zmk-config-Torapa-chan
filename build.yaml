@@ -1,0 +1,9 @@
+include:
+  - board: torapa_chan
+    artifact-name: torapa_chan-macos
+  - board: torapa_chan
+    artifact-name: torapa_chan-windows
+    cmake-args: -DDTS_EXTRA_CPPFLAGS=-DTORAPA_WINDOWS
+  - board: torapa_chan
+    shield: settings_reset
+    artifact-name: torapa_chan-settings-reset

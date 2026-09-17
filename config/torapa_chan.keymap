@@ -1,0 +1,78 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+#ifdef TORAPA_WINDOWS
+#define DESKTOP_LEFT LC(LG(LEFT))
+#define DESKTOP_RIGHT LC(LG(RIGHT))
+#define OVERVIEW LG(TAB)
+#define OVERVIEW_DOWN LG(D)
+#define ZOOM_IN LC(EQUAL)
+#define ZOOM_OUT LC(MINUS)
+#else
+#define DESKTOP_LEFT LC(LEFT)
+#define DESKTOP_RIGHT LC(RIGHT)
+#define OVERVIEW LC(UP)
+#define OVERVIEW_DOWN LC(DOWN)
+#define ZOOM_IN LG(EQUAL)
+#define ZOOM_OUT LG(MINUS)
+#endif
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+        default_layer { bindings = <&none>; };
+    };
+    behaviors {
+        desk_left: desk_left {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            tap-ms = <30>;
+            wait-ms = <10>;
+            bindings = <&macro_tap &kp DESKTOP_LEFT>;
+        };
+        desk_right: desk_right {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            tap-ms = <30>;
+            wait-ms = <10>;
+            bindings = <&macro_tap &kp DESKTOP_RIGHT>;
+        };
+        overview: overview {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            tap-ms = <30>;
+            wait-ms = <10>;
+            bindings = <&macro_tap &kp OVERVIEW>;
+        };
+        overview_down: overview_down {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            tap-ms = <30>;
+            wait-ms = <10>;
+            bindings = <&macro_tap &kp OVERVIEW_DOWN>;
+        };
+        zoom_in: zoom_in {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            tap-ms = <30>;
+            wait-ms = <10>;
+            bindings = <&macro_tap &kp ZOOM_IN>;
+        };
+        zoom_out: zoom_out {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            tap-ms = <30>;
+            wait-ms = <10>;
+            bindings = <&macro_tap &kp ZOOM_OUT>;
+        };
+    };
+    torapa_gestures: torapa_gestures {
+        compatible = "zmk,input-processor-behaviors";
+        #input-processor-cells = <0>;
+        codes = <0x300 0x301 0x302 0x303 0x304 0x305>;
+        bindings = <&desk_left &desk_right &overview &overview_down &zoom_in &zoom_out>;
+    };
+};
+&tps43_listener {
+    input-processors = <&torapa_gestures>;
+};

@@ -1,0 +1,6 @@
+file_format: "1"
+id: torapa_chan
+name: Torapa-chan
+type: board
+arch: arm
+outputs: [usb, ble]
