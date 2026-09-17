@@ -4,7 +4,9 @@ TPS43-Controller（MDBT50Q-1MV2）専用。単体のUSB/BLEマウス＋ジェス
 
 ## 現在の検証状態
 
-2026-09-17：ソース・専用ボード定義・Mac/Windows用設定・GitHub Actionsを作成。ローカルにはwest、Zephyr SDK、Docker、WSLディストリビューションがなく、**ファーム全体のコンパイルは未実施、UF2未生成、実機未検証**。Actionsでビルド成功後に実機評価する。動作保証済みファームではない。OS選択フラグ・6操作のバインド・ソースの括弧対応の静的確認のみ実施。
+2026-09-17：GitHub ActionsでMac用・Windows用・設定リセット用の3種類すべてのビルド成功と、firmware成果物の生成を確認。検証コミット：`dd9edf8`。DC/DCの内部Kconfig項目への直接代入を削除し、基板側でDC/DCを選択しない既定設定を使用する。
+
+[成功したビルドとUF2ダウンロード](https://github.com/razilyis/zmk-config-Torapa-chan/actions/runs/35216256112) のArtifactsから `firmware` を取得する。**実機動作・ジェスチャー・秋月ブートローダーとの互換性は未検証**。コンパイル成功は実機動作の保証ではない。
 
 ## 操作
 
